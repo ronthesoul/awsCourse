@@ -1,5 +1,5 @@
 
-# AWS Basics for SOC Team
+# AWS Shallow Dive
 
 ## 1. What is Cloud Computing?
 Cloud computing is the delivery of computing services (servers, storage, databases, networking, software, analytics, intelligence) over the internet (“the cloud”).  
@@ -195,7 +195,24 @@ AWS Access Keys consist of:
 
 ### How Signing Works
 1. AWS CLI/SDK builds a **canonical request** (method, path, headers, body hash).
+```bash
+GET
+/
+
+host:example.amazonaws.com
+x-amz-date:20250812T120000Z
+
+host;x-amz-date
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+```
 2. Creates a **string to sign** (AWS4 algorithm, timestamp, region, service, request hash) think of it of metadata.
+```bash
+AWS4-HMAC-SHA256
+20250812T120000Z
+20250812/us-east-1/s3/aws4_request
+b1a56c65efb5b33a0cbad04d046b50f429d3e9b771f2f51e8ed5c0c64f9f7d70
+```
+
 3. Uses the **Secret Access Key** to derive a signing key via multiple HMAC-SHA256 steps:
 ```bash
 kDate    = HMAC("AWS4" + SecretAccessKey, Date)
