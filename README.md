@@ -13,6 +13,8 @@ Instead of owning physical servers or data centers, companies rent computing res
 - **Security** – Enterprise-level security measures.
 - **Faster deployment** – Launch resources in minutes.
 
+### AWS responsibilty model
+![AWS Logo](src/aws_resp.png)
 ---
 
 ## 2. Cloud Service Models
