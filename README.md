@@ -111,6 +111,11 @@ Fully managed applications you can use directly:
 ### **Users**
 - A person or application that can authenticate and interact with an AWS account using assigned credentials.
 
+## **Root User**
+- Created when AWS account is first set up.
+- Has full access to all resources.
+- **Best Practices:** Avoid daily use, enable MFA, create IAM admin users.
+
 ### **Groups**
 - A collection of IAM users that share the same permissions.  
   Commonly used by IT and DevOps teams to simplify permission management.  
@@ -367,17 +372,7 @@ Key Takeaways:
 ---
 
 
-### Work in progress
-
-
-## 5. Root Account
-- Created when AWS account is first set up.
-- Has full access to all resources.
-- **Best Practices:** Avoid daily use, enable MFA, create IAM admin users.
-
----
-
-## 6. AWS Core Services
+## 5. AWS Core Services
 
 ### **EC2 (Elastic Compute Cloud)**
 - Virtual servers for running applications.
@@ -395,8 +390,6 @@ Key Takeaways:
 - Controls inbound/outbound traffic at subnet or resource level.
 
 ---
-
-## 7. AWS Structure
 
 
 
