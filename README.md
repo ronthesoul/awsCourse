@@ -338,14 +338,14 @@ terraform destroy
 
 ```mermaid
 flowchart LR
-    Dev[Developer edits main.tf] --> Commit[Commit & push to GitHub]
-    Commit --> CI[CI/CD pipeline starts]
-    CI --> Init[terraform init]
-    Init --> Plan[terraform plan (show proposed changes)]
-    Plan --> Review[Manual review & approval]
-    Review --> Apply[terraform apply (provision/update resources)]
-    Apply --> State[Update remote state in S3/DynamoDB]
-    State --> AWS[AWS infrastructure updated]
+    Dev["Developer edits main.tf"] --> Commit["Commit & push to GitHub"]
+    Commit --> CI["CI/CD pipeline starts"]
+    CI --> Init["terraform init"]
+    Init --> Plan["terraform plan (show proposed changes)"]
+    Plan --> Review["Manual review & approval"]
+    Review --> Apply["terraform apply (provision/update resources)"]
+    Apply --> State["Update remote state in S3/DynamoDB"]
+    State --> AWS["AWS infrastructure updated"]
 
     style Dev fill:#4da6ff,stroke:#003366,stroke-width:2px,color:#ffffff
     style Commit fill:#ffcc66,stroke:#b36b00,stroke-width:2px,color:#000000
