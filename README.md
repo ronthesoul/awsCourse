@@ -335,7 +335,7 @@ terraform apply -auto-approve
 # Destroy all resources defined in the configuration
 terraform destroy
 
-
+```mermaid
 flowchart LR
     Dev[Developer edits main.tf] --> Commit[Commit & push to GitHub]
     Commit --> CI[CI/CD pipeline starts]
@@ -355,7 +355,7 @@ flowchart LR
     style Apply fill:#33cc33,stroke:#006600,stroke-width:2px,color:#ffffff
     style State fill:#b3d9ff,stroke:#003366,stroke-width:2px,color:#000000
     style AWS fill:#66ccff,stroke:#003366,stroke-width:2px,color:#000000
-
+```
 Key Takeaways:
 
 - Terraform ensures infrastructure changes are predictable and automated.
