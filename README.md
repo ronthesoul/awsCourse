@@ -109,20 +109,53 @@ Fully managed applications you can use directly:
 ## 3. AWS Identity and Access Management (IAM)
 
 ### **Users**
-- Individual identities with long-term credentials.
+- A person or application that can authenticate and interact with an AWS account using assigned credentials.
 
 ### **Groups**
-- Collection of users sharing permissions.
-
-### **Roles**
-- Temporary credentials with specific permissions, assumed by users/services.
+- A collection of IAM users that share the same permissions.  
+  Commonly used by IT and DevOps teams to simplify permission management.  
+  Instead of configuring permissions for each user individually, you can add or remove users from a group that already has the required permissions.
 
 ### **Policies**
-- JSON documents defining permissions.
+- JSON documents that define **which AWS resources can be accessed** and **the level of access** (e.g., read, write, delete) to each resource.
+
+### **Roles**
+- A mechanism to grant a set of permissions to be assumed by AWS services, IAM users, or applications.  
+  Roles are typically used for temporary access without sharing long-term credentials.
+
+<img src="src/aws_permissions_exm.png" alt="AWS Permissions Example" width="800">
+
+---
+
+### **Policy Permissions Example**
+
+<img src="src/aws_docu_exm.png" alt="AWS Policy Document Example" width="800">
+
+IAM permission policies follow the **implicit deny** principle:  
+1. AWS first checks if there’s an explicit “Deny” — if found, access is denied.  
+2. If no explicit deny, it checks for an “Allow” — if found, access is granted.  
+3. If neither is found, access is denied by default.
+
+<img src="src/aws_implicit_deny.png" alt="AWS Implicit Deny Model" width="800">
+
+---
+
+### **Example Use of an IAM Role**
+
+A common best practice for granting an application the permissions it needs — without exposing credentials — is to attach an IAM role with the necessary policies directly to the compute resource (e.g., an EC2 instance).  
+
+When the application needs to access another AWS resource (for example, an S3 bucket), it **assumes the role** and gains the temporary permissions required.  
+This ensures the application can access only the intended resources and never stores permanent credentials.
+
+<img src="src/aws_role_scenario.png" alt="AWS Role Usage Scenario" width="800">
+
+---
 
 **Best Practices:**
-- Assign permissions to groups/roles, not directly to users.
-- Use least privilege principle.
+- Assign permissions to groups or roles, not directly to individual users.
+- Follow the **principle of least privilege** — grant only the permissions necessary for the task.
+- Avoid overly broad permissions; be as specific as possible.
+- Use IAM roles for applications and AWS services instead of embedding long-term credentials.
 
 ---
 
