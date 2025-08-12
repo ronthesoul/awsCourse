@@ -334,6 +334,7 @@ terraform apply -auto-approve
 
 # Destroy all resources defined in the configuration
 terraform destroy
+```
 
 ```mermaid
 flowchart LR
