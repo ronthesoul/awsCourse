@@ -161,9 +161,88 @@ This ensures the application can access only the intended resources and never st
 
 ## 4. AWS Access Methods
 - **Console** – Web-based AWS Management Console.
-- **CLI** – Command Line Interface (`aws` commands).
+- **CLI** – Command Line Interface (`aws` commands) uses a public access key (Access key ID) and private Access key.
 - **SDKs** – Programming access for different languages.
 - **Terraform** – Infrastructure as code for automation.
+
+
+## How AWS Access Keys Work
+
+AWS Access Keys consist of:
+- **Access Key ID** (public) – Identifies the IAM user or AWS account (like a username).
+- **Secret Access Key** (private) – Used to cryptographically sign requests (like a password).
+
+---
+
+### How They Work
+1. **Two Parts**
+   - **Access Key ID** (public) – Identifies the AWS account or IAM user making the request.
+   - **Secret Access Key** (private) – Used to sign requests cryptographically.
+
+2. **Usage**
+   - You send an API/CLI request to AWS with your **Access Key ID** and a **digital signature** generated using your Secret Access Key.
+   - AWS verifies the signature to ensure:
+     - The request came from someone who owns the Access Key.
+     - The request wasn’t altered in transit.
+     - The key has the permissions needed (IAM policy check).
+
+3. **Security Rules**
+   - **Never** expose the Secret Access Key in code, GitHub, or public places.
+   - Rotate keys regularly.
+   - Use **IAM roles** with temporary credentials instead of static keys whenever possible.
+
+---
+
+### How Signing Works
+1. AWS CLI/SDK builds a **canonical request** (method, path, headers, body hash).
+2. Creates a **string to sign** (AWS4 algorithm, timestamp, region, service, request hash) think of it of metadata.
+3. Uses the **Secret Access Key** to derive a signing key via multiple HMAC-SHA256 steps:
+```bash
+kDate    = HMAC("AWS4" + SecretAccessKey, Date)
+kRegion  = HMAC(kDate, Region)
+kService = HMAC(kRegion, Service)
+kSigning = HMAC(kService, "aws4_request")
+```
+4. Generates a **signature** for that specific request.
+```bash
+Signature = HMAC(kSigning, StringToSign)
+```
+5. Sends the Access Key ID + signature in the request headers.
+6. AWS verifies the signature and checks IAM permissions.
+
+---
+
+**Key Points:**
+- The **Secret Access Key** is never sent over the network.
+- Each request has a unique signature tied to that moment in time.
+- Use IAM roles instead of hardcoding keys in applications.
+
+
+
+
+```mermaid
+flowchart LR
+    U[User / Application<br>(CLI, SDK, API Call)] --> CR[Canonical Request<br>(standardized request data)]
+    CR --> STS[StringToSign<br>(metadata summary)]
+    SAK[Secret Access Key<br>(private)] --> HK[Derived Signing Key<br>via HMAC-SHA256]
+    STS --> SIG[Signature<br>(HMAC output)]
+    HK --> SIG
+    AK[Access Key ID<br>(public)] --> SIG
+    SIG --> AWS[AWS Service<br>(EC2, S3, etc.)]
+    AWS --> VER[AWS verifies signature<br>& checks IAM policies]
+
+    style U fill:#b3d9ff,stroke:#000
+    style AK fill:#fff2b3,stroke:#000
+    style SAK fill:#ffcccc,stroke:#000
+    style SIG fill:#b3ffb3,stroke:#000
+    style AWS fill:#b3d9ff,stroke:#000
+    style VER fill:#e6e6e6,stroke:#000
+```
+
+
+
+
+
 
 ---
 
