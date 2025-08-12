@@ -344,7 +344,7 @@ flowchart LR
     Init --> Plan["terraform plan (show proposed changes)"]
     Plan --> Review["Manual review & approval"]
     Review --> Apply["terraform apply (provision/update resources)"]
-    Apply --> State["Update remote state in S3/DynamoDB"]
+    Apply --> State["Update remote state in S3]
     State --> AWS["AWS infrastructure updated"]
 
     style Dev fill:#4da6ff,stroke:#003366,stroke-width:2px,color:#ffffff
@@ -364,9 +364,11 @@ Key Takeaways:
 - Using GitHub + remote state + CI/CD allows safe, collaborative infrastructure changes.
 
 
-
-
 ---
+
+
+### Work in progress
+
 
 ## 5. Root Account
 - Created when AWS account is first set up.
