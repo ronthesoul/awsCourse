@@ -14,7 +14,8 @@ Instead of owning physical servers or data centers, companies rent computing res
 - **Faster deployment** – Launch resources in minutes.
 
 ### AWS responsibilty model
-![AWS Logo](src/aws_resp.png)
+<img src="src/aws_resp.png" alt="AWS Responsibility Model" width="800">
+
 ---
 
 ## 2. Cloud Service Models
