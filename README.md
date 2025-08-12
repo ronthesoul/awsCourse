@@ -222,14 +222,14 @@ Signature = HMAC(kSigning, StringToSign)
 
 ```mermaid
 flowchart LR
-    U[User / Application\n(CLI, SDK, API Call)] --> CR[Canonical Request\n(standardized request data)]
-    CR --> STS[StringToSign\n(metadata summary)]
-    SAK[Secret Access Key\n(private)] --> HK[Derived Signing Key\nvia HMAC-SHA256]
-    STS --> SIG[Signature\n(HMAC output)]
+    U["User or App (CLI/SDK/API)"] --> CR["Canonical request"]
+    CR --> STS["StringToSign (metadata summary)"]
+    SAK["Secret Access Key (private)"] --> HK["Derived signing key (HMAC-SHA256)"]
+    STS --> SIG["Signature (HMAC output)"]
     HK --> SIG
-    AK[Access Key ID\n(public)] --> SIG
-    SIG --> AWS[AWS Service\n(EC2, S3, etc.)]
-    AWS --> VER[AWS verifies signature\n& checks IAM policies]
+    AK["Access Key ID (public)"] --> SIG
+    SIG --> AWS["AWS service (EC2, S3, etc.)"]
+    AWS --> VER["AWS verifies signature and checks IAM policies"]
 
     style U fill:#b3d9ff,stroke:#000
     style AK fill:#fff2b3,stroke:#000
