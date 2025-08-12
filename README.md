@@ -231,12 +231,16 @@ flowchart LR
     SIG --> AWS["AWS service (EC2, S3, etc.)"]
     AWS --> VER["AWS verifies signature and checks IAM policies"]
 
-    style U fill:#b3d9ff,stroke:#000
-    style AK fill:#fff2b3,stroke:#000
-    style SAK fill:#ffcccc,stroke:#000
-    style SIG fill:#b3ffb3,stroke:#000
-    style AWS fill:#b3d9ff,stroke:#000
-    style VER fill:#e6e6e6,stroke:#000
+    %% Colors
+    style U fill:#4da6ff,stroke:#003366,stroke-width:2px,color:#ffffff
+    style CR fill:#ff9933,stroke:#994d00,stroke-width:2px,color:#ffffff
+    style STS fill:#ffcc00,stroke:#996600,stroke-width:2px,color:#000000
+    style SAK fill:#ff6666,stroke:#800000,stroke-width:2px,color:#ffffff
+    style HK fill:#9966ff,stroke:#4d0099,stroke-width:2px,color:#ffffff
+    style SIG fill:#33cc33,stroke:#006600,stroke-width:2px,color:#ffffff
+    style AK fill:#ffcc66,stroke:#b36b00,stroke-width:2px,color:#000000
+    style AWS fill:#3399ff,stroke:#003366,stroke-width:2px,color:#ffffff
+    style VER fill:#cccccc,stroke:#666666,stroke-width:2px,color:#000000
 ```
 
 
