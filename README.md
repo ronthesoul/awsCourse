@@ -163,7 +163,7 @@ This ensures the application can access only the intended resources and never st
 - **Console** – Web-based AWS Management Console.
 - **CLI** – Command Line Interface (`aws` commands) uses a public access key (Access key ID) and private Access key.
 - **SDKs** – Programming access for different languages.
-- **Terraform** – Infrastructure as code for automation.
+- **Terraform** – Infrastructure as code for automatio.
 
 
 ## How AWS Access Keys Work
@@ -261,6 +261,106 @@ flowchart LR
 ```
 
 
+### SDK – (Software Development Kits)
+
+SDKs are libraries provided by cloud vendors like AWS for various programming languages, allowing developers to programmatically provision, configure, and manage AWS environments through scripts and applications.
+
+**Example: Python SDK (boto3)** – List all S3 buckets in the environmentt:
+```python
+import boto3
+
+# Create an S3 client (uses credentials from environment, AWS CLI config, or IAM role)
+s3 = boto3.client('s3')
+
+# List all buckets
+response = s3.list_buckets()
+
+print("Your S3 Buckets:")
+for bucket in response['Buckets']:
+    print(f" - {bucket['Name']}")
+```
+
+SDKs use the Access Key ID (public) and Secret Access Key (private) as listed  above - or IAM roles with temporary credentials — to authenticate requests securely.
+
+
+### Terraform (Infrastructure as Code)
+
+Terraform is a widely used tool for automating the provisioning and management of infrastructure using a domain-specific language (HCL – HashiCorp Configuration Language).  
+It’s used extensively in organizations to maintain reproducible, version-controlled infrastructure.
+
+---
+
+#### Core Files
+- **`main.tf`** – Contains the Terraform code describing which resources to create (e.g., EC2, S3, VPC) and the provider configuration (e.g., AWS).
+- **`terraform.tfstate`** – Stores the current state of your infrastructure. Terraform uses it to determine what changes need to be made.  
+  Example:  
+  If the state file shows two EC2 instances (`ec2-1`, `ec2-2`) and the code defines three (`ec2-1`, `ec2-2`, `ec2-3`), Terraform will **only** create the missing one (`ec2-3`).
+
+---
+
+#### State Storage
+- Can be stored **locally** on your machine.
+- In production, it’s best to store it **remotely** (e.g., in an S3 bucket with DynamoDB locking) for:
+  - Security
+  - Collaboration in teams
+  - Consistency across environments
+
+---
+
+#### Typical Workflow with GitHub
+1. Developer makes infrastructure changes in `main.tf`.
+2. Changes are committed and pushed to a GitHub repository.
+3. A CI/CD pipeline (e.g., GitHub Actions, Jenkins) runs:
+   - **`terraform init`** – Downloads providers and sets up the working directory.
+   - **`terraform plan`** – Shows what changes will be made without applying them.
+   - **`terraform apply`** – Applies the changes to the infrastructure.
+4. Terraform updates the remote state to reflect the current infrastructure.
+
+---
+
+#### Key Terraform Commands
+```bash
+# Initialize Terraform in the current directory
+terraform init
+
+# See what changes will be made without applying them
+terraform plan
+
+# Apply the changes (requires confirmation)
+terraform apply
+
+# Apply the changes without asking for confirmation
+terraform apply -auto-approve
+
+# Destroy all resources defined in the configuration
+terraform destroy
+
+
+flowchart LR
+    Dev[Developer edits main.tf] --> Commit[Commit & push to GitHub]
+    Commit --> CI[CI/CD pipeline starts]
+    CI --> Init[terraform init]
+    Init --> Plan[terraform plan\n(Show proposed changes)]
+    Plan --> Review[Manual review & approval]
+    Review --> Apply[terraform apply\n(Provision/Update resources)]
+    Apply --> State[Update remote state in S3/DynamoDB]
+    State --> AWS[AWS Infrastructure updated]
+
+    style Dev fill:#4da6ff,stroke:#003366,stroke-width:2px,color:#ffffff
+    style Commit fill:#ffcc66,stroke:#b36b00,stroke-width:2px,color:#000000
+    style CI fill:#9966ff,stroke:#4d0099,stroke-width:2px,color:#ffffff
+    style Init fill:#ff9933,stroke:#994d00,stroke-width:2px,color:#ffffff
+    style Plan fill:#ffcc00,stroke:#996600,stroke-width:2px,color:#000000
+    style Review fill:#cccccc,stroke:#666666,stroke-width:2px,color:#000000
+    style Apply fill:#33cc33,stroke:#006600,stroke-width:2px,color:#ffffff
+    style State fill:#b3d9ff,stroke:#003366,stroke-width:2px,color:#000000
+    style AWS fill:#66ccff,stroke:#003366,stroke-width:2px,color:#000000
+
+Key Takeaways:
+
+- Terraform ensures infrastructure changes are predictable and automated.
+- The .tfstate file is critical — treat it as sensitive.
+- Using GitHub + remote state + CI/CD allows safe, collaborative infrastructure changes.
 
 
 
