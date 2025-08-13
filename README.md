@@ -430,7 +430,32 @@ A **Virtual Private Cloud** (VPC) is an isolated virtual network within AWS wher
 - Commonly used for software updates, API calls, or downloading packages without exposing instances publicly.
 
 ### **Route 53**
-- DNS and domain registration service.
+
+**Amazon Route 53** is AWS’s managed DNS service that can register domains, host DNS records, and route traffic based on rules.  
+
+- **Public Hosted Zones** – Serve DNS records accessible from the internet.  
+- **Private Hosted Zones** – Serve DNS records only to resources within associated VPCs.  
+
+**Routing Policies** – Route 53 can control how DNS queries are answered using different strategies:  
+- **Simple Routing** – Returns a single resource for a domain name; best when you have one endpoint.  
+- **Weighted Routing** – Splits traffic across multiple resources based on percentages you set (e.g., 70% to one server, 30% to another for A/B testing).  
+- **Latency-based Routing** – Sends users to the region with the lowest latency for them, improving performance.  
+- **Failover Routing** – Automatically routes traffic to a backup resource if the primary becomes unhealthy.  
+- **Geolocation Routing** – Routes traffic based on the user’s location (e.g., send European users to EU servers).  
+- **Geoproximity Routing** – Routes traffic based on geographic location and allows biasing towards certain resources.  
+- **Multi-value Answer Routing** – Returns multiple healthy resources to improve redundancy.
+
+**Health Checks** – Route 53 can monitor the health of endpoints (via HTTP, HTTPS, or TCP checks):  
+- If an endpoint fails health checks, Route 53 stops including it in DNS responses.  
+- Health checks can be integrated with failover or multi-value routing to ensure users are sent only to healthy resources.  
+- You can configure alarms with CloudWatch for visibility when health checks fail. 
+
+**Key Use Cases:**
+- Host and manage DNS records like Cloudflare.
+- Route internal VPC traffic to private resources via Private Hosted Zones.
+- Route internet traffic to AWS or external resources.
+
+<img src="src/aws_route53.png" alt="AWS Role Usage Scenario" width="800">
 
 ### **Security groups**
 A Security Group is a virtual firewall for controlling inbound and outbound traffic **at the instance level**.
