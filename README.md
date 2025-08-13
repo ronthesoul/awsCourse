@@ -446,7 +446,7 @@ An EC2 instance typically boots from an EBS volume, which stores the OS and data
 
 Amazon S3 is AWS’s scalable **object storage** service used to store and retrieve any amount of data from anywhere on the web.
 
-<img src="src/aws_s32_ebs.png" alt="AWS Role Usage Scenario" width="800">
+<img src="src/aws_s32.png" alt="AWS Role Usage Scenario" width="800">
 
 ### Key Attributes
 1. **Buckets**  
@@ -492,7 +492,7 @@ Amazon S3 is AWS’s scalable **object storage** service used to store and retri
 - Serving media files to applications.
 - Data lakes for analytics.
 
-<img src="src/aws_s3_ebs.png" alt="AWS Role Usage Scenario" width="800">
+<img src="src/aws_s3.png" alt="AWS Role Usage Scenario" width="800">
 
 
 ### VPC (Virtual Private Cloud)
