@@ -499,8 +499,6 @@ Amazon S3 is AWS’s scalable **object storage** service used to store and retri
 
 A **Virtual Private Cloud** (VPC) is an isolated virtual network within AWS where you can launch and manage AWS resources securely.
 
-<img src="src/aws_vpc1.png" alt="AWS Role Usage Scenario" width="800">
-
 **Key Components:**
 
 - **Subnets**  
@@ -602,17 +600,102 @@ A Network ACL is a virtual firewall for controlling inbound and outbound traffic
 
 
 
-### **SSM**
+## AWS SSM Documents
 
-### **Cloudtrail**
+### What are SSM Documents?
+SSM (Systems Manager) Documents are JSON or YAML files that define the actions AWS Systems Manager should perform on managed instances or AWS resources.
 
-### **Cloudwatch**
-
-### **Guarduty**
+They can:
+- Automate tasks like patching, software installation, or configuration changes.
+- Be run **on-demand** or **scheduled**.
+- Be **custom** (created by you) or **AWS-provided**.
 
 ---
 
+### Executing SSM Documents
+1. **On-Demand Execution**  
+   - Use `AWS-RunCommand` to run the document instantly on one or more instances.
+2. **Scheduled Execution (Associations)**  
+   - Attach an SSM Document to an instance or group of instances via an **association**.
+   - Runs automatically according to your defined schedule or triggers.
+   - Common for recurring tasks like nightly patching or compliance checks.
 
+```yaml
+---
+schemaVersion: '2.2'
+description: "Install Apache Web Server"
+mainSteps:
+  - action: aws:runCommand
+    name: InstallApache
+    inputs:
+      DocumentName: AWS-RunShellScript
+      Parameters:
+        commands:
+          - sudo yum update -y
+          - sudo yum install -y httpd
+          - sudo systemctl start httpd
+          - sudo systemctl enable httpd
+
+```
+
+### **AWS CloudTrail**
+- **Purpose:** Records **API calls** and account activity across AWS.
+- **What it tracks:** Who did what, when, and from where.
+- **Data Source:** Management & data plane events from AWS services.
+- **Use Cases:** Auditing, compliance, and security investigations.
+- **Example:** Logs when an IAM user creates or deletes an EC2 instance.
+
+### **AWS CloudWatch**
+- **Purpose:** Monitors **metrics**, collects logs, and sets alarms.
+- **What it tracks:** Resource utilization, application logs, and performance data.
+- **Data Source:** AWS services, custom metrics, and application logs.
+- **Use Cases:** Operational monitoring, alerting, automated scaling.
+- **Example:** Sends an alarm if CPU usage on an EC2 instance exceeds 80% for 5 minutes.
+
+
+### **Key Differences CloudTrail VS CloudWatch**
+
+| Feature        | CloudTrail                                | CloudWatch                                 | GuardDuty                                    |
+|----------------|-------------------------------------------|---------------------------------------------|----------------------------------------------|
+| **Main Role**  | Logs & audits AWS API activity            | Monitors performance & collects metrics     | Detects and alerts on threats                |
+| **Data Type**  | API call history                          | Metrics, logs, and events                   | Threat intelligence from logs & events       |
+| **Focus**      | **Who** did **what** and **when**          | **How** systems are performing              | **Is something malicious happening?**        |
+| **Retention**  | Stored in S3 or sent to CloudWatch Logs    | Metrics/logs stored for configurable period | Findings stored in GuardDuty console/S3      |
+| **Proactive?** | No – historical logging                   | Yes – can alert in near real-time           | Yes – continuously analyzes and alerts       |
+
+
+
+### **AWS GuardDuty**
+
+**Purpose:**  
+GuardDuty is a managed threat detection service that continuously monitors AWS accounts, workloads, and data for malicious or unauthorized activity.
+
+**How It Works:**  
+GuardDuty analyzes multiple AWS data sources to detect suspicious patterns without deploying any additional security infrastructure. It uses machine learning, anomaly detection, and integrated threat intelligence feeds.
+
+**Data Sources:**  
+- **VPC Flow Logs** – Detects unusual network patterns, like traffic from unexpected IP ranges.  
+- **CloudTrail Events** – Identifies suspicious AWS API activity, like mass IAM key creation.  
+- **DNS Query Logs** – Flags requests to known malicious domains.  
+- **EBS Malware Scan** – Detects malware in Amazon EBS volumes (integrated feature).  
+
+**Key Features:**  
+- Continuous, real-time monitoring.  
+- No additional agents or appliances required.  
+- Integrates with **CloudWatch Events** for automated responses.  
+- Supports multi-account AWS Organizations integration.
+
+**Use Cases:**  
+- Detecting compromised IAM credentials.  
+- Identifying unauthorized access from unusual locations.  
+- Detecting EC2 instances communicating with known malware command-and-control servers.  
+- Scanning EBS volumes for malicious files after incidents.
+
+**Example Scenario:**  
+If an IAM user normally operates from Israel but suddenly authenticates from Russia and tries to launch multiple EC2 instances, GuardDuty will generate a **High Severity Finding**, which can trigger an automated remediation workflow via Lambda.
+
+**Integration**  
+GuardDuty findings can be sent to **AWS Security Hub** for centralized security management or directly to **SIEM tools** for correlation with other logs.
 
 ---
 
@@ -625,4 +708,4 @@ By understanding these concepts, you'll be able to:
 
 ---
 
-*Prepared for SOC Team – AWS Basics*
+
