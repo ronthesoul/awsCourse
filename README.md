@@ -378,8 +378,74 @@ Key Takeaways:
 ## 5. AWS Core Services
 
 
-### **EC2 (Elastic Compute Cloud)**
-- Virtual servers for running applications.
+## Amazon EC2 (Elastic Compute Cloud)
+
+Amazon EC2 provides scalable virtual servers in the AWS cloud.  
+You can customize an instance based on several attributes:
+
+### Key Attributes
+1. **AMI (Amazon Machine Image)** – Defines the OS and pre-installed software.
+2. **Instance Type** – Determines CPU, memory, storage, and networking capacity.
+3. **Network Settings** – VPC, subnets, and public IP assignment.
+4. **IAM Role** – Grants permissions to the instance for AWS service access.
+5. **User Data** – Scripts or commands that run on first boot.
+6. **Storage Options (EBS/Ephemeral)** – Persistent (EBS) or temporary storage.
+7. **Tags** – Key-value pairs for organization.
+8. **Security Group** – Virtual firewall controlling inbound/outbound traffic.
+9. **Key Pair** – SSH access credentials.
+
+### Amazon EBS (Elastic Block Store)
+- Persistent block storage for EC2.
+- Remains available independently of the instance lifecycle.
+- Can be attached, detached, and re-attached to EC2 instances.
+
+**How EC2 & EBS Work Together:**  
+An EC2 instance typically boots from an EBS volume, which stores the OS and data. Even if the instance stops, data persists in the EBS volume.
+
+---
+
+### Example EC2 Instance JSON
+```json
+{
+  "ImageId": "ami-0123456789abcdef0",
+  "InstanceType": "t2.micro",
+  "KeyName": "my-keypair",
+  "SubnetId": "subnet-0abc1234def567890",
+  "SecurityGroupIds": ["sg-0123abcd4567efgh8"],
+  "IamInstanceProfile": {
+    "Name": "EC2S3AccessRole"
+  },
+  "TagSpecifications": [
+    {
+      "ResourceType": "instance",
+      "Tags": [
+        {"Key": "Name", "Value": "MyEC2Instance"}
+      ]
+    }
+  ],
+  "UserData": "IyEvYmluL2Jhc2gKZWNobyAiSGVsbG8gZnJvbSBVU0VSRGF0YSIgPiAvdmFyL3d3dy9odG1sL2luZGV4Lmh0bWw=",
+  "BlockDeviceMappings": [
+    {
+      "DeviceName": "/dev/xvda",
+      "Ebs": {
+        "VolumeSize": 8,
+        "VolumeType": "gp3",
+        "DeleteOnTermination": true
+      }
+    }
+  ],
+  "MinCount": 1,
+  "MaxCount": 1
+}
+```
+
+<img src="src/aws_ec2_ebs.png" alt="AWS Role Usage Scenario" width="800">
+
+
+
+
+
+
 
 ### **S3 (Simple Storage Service)**
 - Object storage for files, backups, and data.
@@ -489,10 +555,6 @@ A Network ACL is a virtual firewall for controlling inbound and outbound traffic
 
 <img src="src/aws_acl_sg.png" alt="AWS Role Usage Scenario" width="800">
 
-
-
-
-## **Cloudfront**
 
 
 ### **SSM**
