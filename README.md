@@ -442,13 +442,58 @@ An EC2 instance typically boots from an EBS volume, which stores the OS and data
 <img src="src/aws_ec2_ebs.png" alt="AWS Role Usage Scenario" width="800">
 
 
+## Amazon S3 (Simple Storage Service)
 
+Amazon S3 is AWS’s scalable **object storage** service used to store and retrieve any amount of data from anywhere on the web.
 
+<img src="src/aws_s32_ebs.png" alt="AWS Role Usage Scenario" width="800">
 
+### Key Attributes
+1. **Buckets**  
+   - Top-level containers for objects (files).  
+   - Have globally unique names.  
+   - Configurable for region, versioning, logging, and encryption.
 
+2. **Objects**  
+   - Individual files stored in buckets.  
+   - Each object has:
+     - Data (the file itself)
+     - Metadata (information about the file)
+     - A unique key (path/name inside the bucket)
 
-### **S3 (Simple Storage Service)**
-- Object storage for files, backups, and data.
+3. **Storage Classes**  
+   - Optimize cost and performance based on access patterns.  
+   - Examples: Standard, Intelligent-Tiering, Standard-IA, Glacier.
+
+4. **Access Control**  
+   - Managed via **Bucket Policies**, **IAM Policies**, and **Access Control Lists (ACLs)**.  
+   - Supports fine-grained permissions for users and applications.
+
+5. **Versioning**  
+   - Keeps multiple versions of an object to protect against accidental overwrites or deletions.
+
+6. **Data Management**  
+   - Lifecycle rules for automatic transition to cheaper storage or deletion.
+   - Replication for cross-region or same-region redundancy.
+
+---
+
+### How It Works
+- You create a **bucket** in a chosen AWS region.
+- Upload files (objects) to the bucket with a unique key.
+- Access objects using HTTPS URLs or via the AWS CLI/SDK.
+- Integrates with many AWS services for backups, static websites, analytics, and big data processing.
+
+---
+
+**Example Use Cases:**
+- Hosting static websites.
+- Storing backups and logs.
+- Serving media files to applications.
+- Data lakes for analytics.
+
+<img src="src/aws_s3_ebs.png" alt="AWS Role Usage Scenario" width="800">
+
 
 ### VPC (Virtual Private Cloud)
 
