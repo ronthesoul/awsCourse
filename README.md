@@ -362,6 +362,9 @@ flowchart LR
     style State fill:#b3d9ff,stroke:#003366,stroke-width:2px,color:#000000
     style AWS fill:#66ccff,stroke:#003366,stroke-width:2px,color:#000000
 ```
+
+[AWS to provisioning with Terraform](https://github.com/ronthesoul/aws-terraform)
+
 Key Takeaways:
 
 - Terraform ensures infrastructure changes are predictable and automated.
@@ -417,11 +420,63 @@ A **Virtual Private Cloud** (VPC) is an isolated virtual network within AWS wher
 
   <img src="src/aws_vpc2.png" alt="AWS Role Usage Scenario" width="800">
 
+ - **NAT Gateway**
+
+  A NAT Gateway allows resources in a **private subnet** to access the internet or AWS services **outbound**, while blocking **inbound** connections from the internet.
+
+- Placed in a **public subnet** with an Elastic IP.
+- Used in the route table of a private subnet for internet-bound traffic.
+- Managed by AWS — automatically scales and is highly available within its AZ.
+- Commonly used for software updates, API calls, or downloading packages without exposing instances publicly.
+
 ### **Route 53**
 - DNS and domain registration service.
 
+### **Security groups**
+A Security Group is a virtual firewall for controlling inbound and outbound traffic **at the instance level**.
+- **Stateful** – If you allow inbound traffic, the return traffic is automatically allowed.
+- Rules are based on:
+  - Protocol (TCP, UDP, ICMP)
+  - Port ranges
+  - Source/Destination (IP, CIDR, or other SG)
+- Applied directly to AWS resources like EC2 instances or ENIs.
+- Best for **resource-level security**.
+
+<img src="src/aws_sg.png" alt="AWS Role Usage Scenario" width="800">
+
+
 ### **ACL (Access Control List)**
-- Controls inbound/outbound traffic at subnet or resource level.
+A Network ACL is a virtual firewall for controlling inbound and outbound traffic **at the subnet level**.
+- **Stateless** – Return traffic must be explicitly allowed in the rules.
+- Rules are evaluated in order, from the lowest number to the highest.
+- Rules specify:
+  - Allow or Deny
+  - Protocol
+  - Port range
+  - Source/Destination CIDR block
+- Best for **subnet-level security**.
+
+<img src="src/aws_acl.png" alt="AWS Role Usage Scenario" width="800">
+
+**Key Difference:**  
+- **SG**: Instance-level, stateful, simpler rules.  
+- **ACL**: Subnet-level, stateless, ordered rules with explicit allow/deny.
+
+<img src="src/aws_acl_sg.png" alt="AWS Role Usage Scenario" width="800">
+
+
+
+
+## **Cloudfront**
+
+
+### **SSM**
+
+### **Cloudtrail**
+
+### **Cloudwatch**
+
+### **Guarduty**
 
 ---
 
