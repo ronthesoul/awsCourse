@@ -374,14 +374,48 @@ Key Takeaways:
 
 ## 5. AWS Core Services
 
+
 ### **EC2 (Elastic Compute Cloud)**
 - Virtual servers for running applications.
 
 ### **S3 (Simple Storage Service)**
 - Object storage for files, backups, and data.
 
-### **VPC (Virtual Private Cloud)**
-- Isolated network environment within AWS.
+### VPC (Virtual Private Cloud)
+
+A **Virtual Private Cloud** (VPC) is an isolated virtual network within AWS where you can launch and manage AWS resources securely.
+
+<img src="src/aws_vpc1.png" alt="AWS Role Usage Scenario" width="800">
+
+**Key Components:**
+
+- **Subnets**  
+  - Logical subdivisions of the VPC’s IP address range (CIDR block).  
+  - **Public subnets**: Accessible from the internet (via Internet Gateway).  
+  - **Private subnets**: No direct internet access.
+
+- **Routing Tables**  
+  - Define how traffic is directed within the VPC and to external networks.  
+  - Each route specifies a **destination CIDR block** and a **target** (e.g., Internet Gateway, NAT Gateway, local).
+
+- **Network Gateways**  
+  - **Internet Gateway (IGW)**: Enables communication between VPC resources and the internet.  
+  - **NAT Gateway**: Allows private subnet instances to connect out to the internet without exposing them to inbound traffic.  
+  - **VPC Peering / Transit Gateway**: Connects multiple VPCs.
+
+**How It Works:**
+1. You define a **CIDR block** when creating the VPC.
+2. Create **subnets** within that CIDR block to segment resources.
+3. Associate **routing tables** with subnets to control traffic flow.
+4. Attach appropriate **network gateways** to enable internet access or private connections.
+5. Use **security groups** and **network ACLs** to control inbound/outbound traffic at the instance or subnet level.
+
+**Example:**
+- VPC CIDR: `10.0.0.0/16`
+  - Public Subnet: `10.0.1.0/24` → Route to IGW
+  - Private Subnet: `10.0.2.0/24` → Private Route table
+
+  <img src="src/aws_vpc2.png" alt="AWS Role Usage Scenario" width="800">
 
 ### **Route 53**
 - DNS and domain registration service.
