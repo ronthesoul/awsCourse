@@ -655,13 +655,14 @@ mainSteps:
 
 ### **Key Differences CloudTrail VS CloudWatch**
 
-| Feature        | CloudTrail                                | CloudWatch                                 | GuardDuty                                    |
-|----------------|-------------------------------------------|---------------------------------------------|----------------------------------------------|
-| **Main Role**  | Logs & audits AWS API activity            | Monitors performance & collects metrics     | Detects and alerts on threats                |
-| **Data Type**  | API call history                          | Metrics, logs, and events                   | Threat intelligence from logs & events       |
-| **Focus**      | **Who** did **what** and **when**          | **How** systems are performing              | **Is something malicious happening?**        |
-| **Retention**  | Stored in S3 or sent to CloudWatch Logs    | Metrics/logs stored for configurable period | Findings stored in GuardDuty console/S3      |
-| **Proactive?** | No – historical logging                   | Yes – can alert in near real-time           | Yes – continuously analyzes and alerts       |
+| Feature        | CloudTrail                                | CloudWatch                                 |
+|----------------|-------------------------------------------|---------------------------------------------|
+| **Main Role**  | Logs & audits AWS API activity            | Monitors performance & collects metrics     |
+| **Data Type**  | API call history                          | Metrics, logs, and events                   |
+| **Focus**      | **Who** did **what** and **when**          | **How** systems are performing              |
+| **Retention**  | Stored in S3 or sent to CloudWatch Logs    | Metrics/logs stored for configurable period |
+| **Proactive?** | No – historical logging                   | Yes – can alert in near real-time           |
+
 
 
 
