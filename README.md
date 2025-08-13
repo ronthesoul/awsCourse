@@ -1,6 +1,64 @@
 
 # AWS Shallow Dive
 
+<img src="src/aws_main.png" alt="AWS Permissions Example" width="800">
+
+## Table of Contents
+
+1. [What is Cloud Computing?](#1-what-is-cloud-computing)
+   - [Why use Cloud instead of Local Infrastructure?](#why-use-cloud-instead-of-local-infrastructure)
+   - [AWS Responsibility Model](#aws-responsibilty-model)
+   - [Key AWS Structures](#key-aws-structures-with-arn-examples)
+     - [Regions & Availability Zones (AZs)](#regions--availability-zones-azs)
+     - [Accounts, “Projects”, and Subscriptions](#accounts-projects-and-subscriptions)
+     - [Billing](#billing-how-you-pay)
+   - [Amazon Resource Names (ARN)](#arn-amazon-resource-name)
+
+2. [Cloud Service Models](#2-cloud-service-models)
+   - [IaaS](#iaas--infrastructure-as-a-service)
+   - [PaaS](#paas--platform-as-a-service)
+   - [SaaS](#saas--software-as-a-service)
+
+3. [AWS Identity and Access Management (IAM)](#3-aws-identity-and-access-management-iam)
+   - [Users](#users)
+   - [Root User](#root-user)
+   - [Groups](#groups)
+   - [Policies](#policies)
+   - [Roles](#roles)
+   - [Policy Permissions Example](#policy-permissions-example)
+   - [Example Use of an IAM Role](#example-use-of-an-iam-role)
+   - [Best Practices](#best-practices)
+
+4. [AWS Access Methods](#4-aws-access-methods)
+   - [How AWS Access Keys Work](#how-aws-access-keys-work)
+   - [How Signing Works](#how-signing-works)
+   - [SDK – Software Development Kits](#sdk--software-development-kits)
+   - [Terraform – Infrastructure as Code](#terraform-infrastructure-as-code)
+
+5. [AWS Core Services](#5-aws-core-services)
+   - [Amazon EC2](#amazon-ec2-elastic-compute-cloud)
+     - [Key Attributes](#key-attributes)
+     - [Amazon EBS](#amazon-ebs-elastic-block-store)
+     - [Example EC2 Instance JSON](#example-ec2-instance-json)
+   - [Amazon S3](#amazon-s3-simple-storage-service)
+     - [Key Attributes](#key-attributes-1)
+     - [How It Works](#how-it-works)
+     - [Example Use Cases](#example-use-cases)
+   - [VPC – Virtual Private Cloud](#vpc-virtual-private-cloud)
+     - [Key Components](#key-components)
+     - [NAT Gateway](#nat-gateway)
+   - [Route 53](#route-53)
+   - [Security Groups](#security-groups)
+   - [Network ACLs](#acl-access-control-list)
+   - [AWS SSM Documents](#aws-ssm-documents)
+   - [AWS CloudTrail](#aws-cloudtrail)
+   - [AWS CloudWatch](#aws-cloudwatch)
+   - [Key Differences CloudTrail vs CloudWatch](#key-differences-cloudtrail-vs-cloudwatch)
+   - [AWS GuardDuty](#aws-guardduty)
+
+6. [Summary](#summary)
+
+
 ## 1. What is Cloud Computing?
 Cloud computing is the delivery of computing services (servers, storage, databases, networking, software, analytics, intelligence) over the internet (“the cloud”).  
 Instead of owning physical servers or data centers, companies rent computing resources from providers like AWS.
