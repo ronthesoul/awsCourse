@@ -35,8 +35,7 @@ Do not create, modify, or delete resources.
 ## Task 2: CloudTrail & CloudWatch Monitoring
 **Goal:** Explore logging and monitoring to spot activity.
 
-### Steps
-1. **CloudTrail**
+### Steps1. **CloudTrail**
    - Navigate to **CloudTrail → Event history**.
    - Filter for the last 24 hours.
    - Identify:
@@ -44,28 +43,10 @@ Do not create, modify, or delete resources.
      - One **S3** event (list bucket, get object, etc.).
      - One **EC2** event (start/stop/describe instance).
 
-2. **CloudWatch Logs**
-   - Go to **CloudWatch → Logs Insights**.
-   - Pick a log group (for example: `VPCFlowLogs`, `CloudTrail/DefaultLogGroup`, or `GuardDuty`).
-   - Run this query:
-     ```sql
-     fields @timestamp, @message
-     | sort @timestamp desc
-     | limit 20
-     ```
-   - Review the last few log lines.
 
 ### Questions to Answer
 - Which IAM event did you find (user login, role assumption, policy action)?
 - Which S3 event did you find (read, list, etc.)?
-- Which EC2 event did you see?
-- Which log group did you query in CloudWatch?
-- Share one example of a log message you saw.
-
+- Which EC2 event did you see what ami did it use? what is the type of the EC2?
 ---
 
-## Deliverable
-Write down your findings for both tasks and share them with the instructor.  
-Keep it short but concrete: list **what you observed** and any **potential security concerns**.
-
----
