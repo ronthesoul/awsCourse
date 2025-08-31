@@ -1,7 +1,16 @@
 
+---
+marp: true
+theme: default
+paginate: true
+---
+
+
 # AWS Shallow Dive
 
 <img src="src/aws_main.png" alt="AWS Permissions Example" width="800">
+
+---
 
 ## Table of Contents
 
@@ -17,7 +26,7 @@
 2. [Cloud Service Models](#2-cloud-service-models)
    - [IaaS](#iaas--infrastructure-as-a-service)
    - [PaaS](#paas--platform-as-a-service)
-   - [SaaS](#saas--software-as-a-service)
+  Dol: [SaaS](#saas--software-as-a-service)
 
 3. [AWS Identity and Access Management (IAM)](#3-aws-identity-and-access-management-iam)
    - [Users](#users)
@@ -43,6 +52,7 @@
    - [Amazon S3](#amazon-s3-simple-storage-service)
      - [Key Attributes](#key-attributes-1)
      - [How It Works](#how-it-works)
+     - [S3 Lifecycle Policies](#s3-lifecycle-policies)
      - [Example Use Cases](#example-use-cases)
    - [VPC – Virtual Private Cloud](#vpc-virtual-private-cloud)
      - [Key Components](#key-components)
@@ -55,13 +65,17 @@
    - [AWS CloudWatch](#aws-cloudwatch)
    - [Key Differences CloudTrail vs CloudWatch](#key-differences-cloudtrail-vs-cloudwatch)
    - [AWS GuardDuty](#aws-guardduty)
+   - [AWS KMS](#aws-kms-key-management-service)
 
 6. [Summary](#summary)
 
+---
 
 ## 1. What is Cloud Computing?
 Cloud computing is the delivery of computing services (servers, storage, databases, networking, software, analytics, intelligence) over the internet (“the cloud”).  
 Instead of owning physical servers or data centers, companies rent computing resources from providers like AWS.
+
+---
 
 ### Why use Cloud instead of Local Infrastructure?
 - **Scalability** – Easily scale up or down as needed.
@@ -71,11 +85,12 @@ Instead of owning physical servers or data centers, companies rent computing res
 - **Security** – Enterprise-level security measures.
 - **Faster deployment** – Launch resources in minutes.
 
+---
+
 ### AWS responsibilty model
 <img src="src/aws_resp.png" alt="AWS Responsibility Model" width="800">
 
-
-### Key AWS structures
+---
 
 ## Key AWS Structures (with ARN examples)
 
@@ -84,11 +99,15 @@ Instead of owning physical servers or data centers, companies rent computing res
 - **Physically**: each Region contains **multiple AZs**; each AZ is an isolated data center or campus with separate power, cooling, and networking.
 - **Why it matters**: place workloads near users (low latency) and keep data in-country (compliance). Design for HA by spreading across **≥2 AZs**.
 
+---
+
 ### Accounts, “Projects”, and Subscriptions
 - **AWS Account** = isolation + billing boundary + IAM scope. Use multiple accounts for envs (prod/stage/dev), teams, or tenants.
 - **“Project”** (not an AWS primitive): organize via **tags**, **OUs** (AWS Organizations), and sometimes **separate accounts** per project.
 - **“Subscription”** is an **Azure** term. In AWS the closest equivalent is an **Account**.
 - **Organizations**: link accounts, apply guardrails (SCPs), and use **Consolidated Billing**.
+
+---
 
 ### Billing (how you pay)
 - **Pay-as-you-go** for usage (compute hours, GB-months, requests, egress).
@@ -106,6 +125,7 @@ A **globally unique identifier** for any AWS resource.
 **Generic format**  
 arn:partition:service:region:account-id:resource
 
+---
 
 **Field breakdown:**
 - **`arn`** – indicates that this is an Amazon Resource Name.
@@ -122,7 +142,6 @@ arn:aws:dynamodb:us-east-1:123456789012:table/MyTable
 
 ---
 
-
 ## 2. Cloud Service Models
 
 ### **IaaS** – Infrastructure as a Service
@@ -133,10 +152,14 @@ arn:aws:dynamodb:us-east-1:123456789012:table/MyTable
 
 <img src="src/aws_iaas.png" alt="AWS Responsibility Model" width="800">
 
+---
+
 AWS provides raw infrastructure resources, and you manage the operating systems, networking, and software:
 - **Amazon EC2** – Virtual servers you manage.
 - **Amazon EBS** – Block storage volumes for EC2 instances.
 - **Amazon VPC** – Isolated virtual network environment in AWS.
+
+---
 
 ### **PaaS** – Platform as a Service
 - Provides platform and environment to build apps without managing infrastructure.
@@ -145,10 +168,14 @@ AWS provides raw infrastructure resources, and you manage the operating systems,
 
 <img src="src/aws_paas.png" alt="AWS Responsibility Model" width="800">
 
+---
+
 Services where AWS manages the underlying infrastructure, and you focus on code or application logic:
 - **AWS Lambda** – Run code without managing servers (serverless).
 - **Amazon RDS** – Managed relational database service.
 - **AWS Elastic Beanstalk** – Deploy and manage applications without handling infrastructure.
+
+---
 
 ### **SaaS** – Software as a Service
 - Ready-to-use software hosted in the cloud.
@@ -156,6 +183,8 @@ Services where AWS manages the underlying infrastructure, and you focus on code 
 - You use the software; AWS/vendor manages everything.
 
 <img src="src/aws_saas.png" alt="AWS Responsibility Model" width="800">
+
+---
 
 Fully managed applications you can use directly:
 - **AWS Trusted Advisor** – Recommendations for cost optimization, performance, and security best practices.
@@ -169,18 +198,26 @@ Fully managed applications you can use directly:
 ### **Users**
 - A person or application that can authenticate and interact with an AWS account using assigned credentials.
 
+---
+
 ## **Root User**
 - Created when AWS account is first set up.
 - Has full access to all resources.
 - **Best Practices:** Avoid daily use, enable MFA, create IAM admin users.
+
+---
 
 ### **Groups**
 - A collection of IAM users that share the same permissions.  
   Commonly used by IT and DevOps teams to simplify permission management.  
   Instead of configuring permissions for each user individually, you can add or remove users from a group that already has the required permissions.
 
+---
+
 ### **Policies**
 - JSON documents that define **which AWS resources can be accessed** and **the level of access** (e.g., read, write, delete) to each resource.
+
+---
 
 ### **Roles**
 - A mechanism to grant a set of permissions to be assumed by AWS services, IAM users, or applications.  
@@ -226,8 +263,9 @@ This ensures the application can access only the intended resources and never st
 - **Console** – Web-based AWS Management Console.
 - **CLI** – Command Line Interface (`aws` commands) uses a public access key (Access key ID) and private Access key.
 - **SDKs** – Programming access for different languages.
-- **Terraform** – Infrastructure as code for automatio.
+- **Terraform** – Infrastructure as code for automation.
 
+---
 
 ## How AWS Access Keys Work
 
@@ -276,6 +314,8 @@ AWS4-HMAC-SHA256
 b1a56c65efb5b33a0cbad04d046b50f429d3e9b771f2f51e8ed5c0c64f9f7d70
 ```
 
+---
+
 3. Uses the **Secret Access Key** to derive a signing key via multiple HMAC-SHA256 steps:
 ```bash
 kDate    = HMAC("AWS4" + SecretAccessKey, Date)
@@ -297,8 +337,7 @@ Signature = HMAC(kSigning, StringToSign)
 - Each request has a unique signature tied to that moment in time.
 - Use IAM roles instead of hardcoding keys in applications.
 
-
-
+---
 
 ```mermaid
 flowchart LR
@@ -323,12 +362,13 @@ flowchart LR
     style VER fill:#cccccc,stroke:#666666,stroke-width:2px,color:#000000
 ```
 
+---
 
 ### SDK – (Software Development Kits)
 
 SDKs are libraries provided by cloud vendors like AWS for various programming languages, allowing developers to programmatically provision, configure, and manage AWS environments through scripts and applications.
 
-**Example: Python SDK (boto3)** – List all S3 buckets in the environmentt:
+**Example: Python SDK (boto3)** – List all S3 buckets in the environment:
 ```python
 import boto3
 
@@ -343,8 +383,9 @@ for bucket in response['Buckets']:
     print(f" - {bucket['Name']}")
 ```
 
-SDKs use the Access Key ID (public) and Secret Access Key (private) as listed  above - or IAM roles with temporary credentials — to authenticate requests securely.
+SDKs use the Access Key ID (public) and Secret Access Key (private) as listed above - or IAM roles with temporary credentials — to authenticate requests securely.
 
+---
 
 ### Terraform (Infrastructure as Code)
 
@@ -399,6 +440,8 @@ terraform apply -auto-approve
 terraform destroy
 ```
 
+---
+
 ```mermaid
 flowchart LR
     Dev["Developer edits main.tf"] --> Commit["Commit & push to GitHub"]
@@ -421,6 +464,8 @@ flowchart LR
     style AWS fill:#66ccff,stroke:#003366,stroke-width:2px,color:#000000
 ```
 
+---
+
 [AWS to provisioning with Terraform](https://github.com/ronthesoul/aws-terraform)
 
 Key Takeaways:
@@ -429,12 +474,11 @@ Key Takeaways:
 - The .tfstate file is critical — treat it as sensitive.
 - Using GitHub + remote state + CI/CD allows safe, collaborative infrastructure changes.
 
-
 ---
-
 
 ## 5. AWS Core Services
 
+---
 
 ## Amazon EC2 (Elastic Compute Cloud)
 
@@ -451,6 +495,8 @@ You can customize an instance based on several attributes:
 7. **Tags** – Key-value pairs for organization.
 8. **Security Group** – Virtual firewall controlling inbound/outbound traffic.
 9. **Key Pair** – SSH access credentials.
+
+---
 
 ### Amazon EBS (Elastic Block Store)
 - Persistent block storage for EC2.
@@ -499,12 +545,15 @@ An EC2 instance typically boots from an EBS volume, which stores the OS and data
 
 <img src="src/aws_ec2_ebs.png" alt="AWS Role Usage Scenario" width="800">
 
+---
 
 ## Amazon S3 (Simple Storage Service)
 
 Amazon S3 is AWS’s scalable **object storage** service used to store and retrieve any amount of data from anywhere on the web.
 
 <img src="src/aws_s32.png" alt="AWS Role Usage Scenario" width="800">
+
+---
 
 ### Key Attributes
 1. **Buckets**  
@@ -544,6 +593,21 @@ Amazon S3 is AWS’s scalable **object storage** service used to store and retri
 
 ---
 
+### S3 Lifecycle Policies
+S3 Lifecycle policies automate the management of objects over time by transitioning them to lower-cost storage classes or deleting them based on rules.  
+
+For example, for hot logs:  
+- **Day 0**: Store in **S3 Standard** for frequent access (low latency, high throughput).  
+- **After 30 days**: Transition to **S3 Standard-Infrequent Access (IA)** for less frequent but still quick access (lower storage cost).  
+- **After 90 days**: Move to **S3 Glacier Instant Retrieval** or **S3 Glacier Flexible Retrieval** for archival (even lower cost, with retrieval times from milliseconds to minutes).  
+- **After 180 days**: Optionally delete or transition to **S3 Glacier Deep Archive** for long-term retention (cheapest storage, retrieval in hours).  
+
+This optimizes costs while ensuring data availability based on access patterns.
+
+<img src="src/aws-lifecycle.png" alt="AWS Role Usage Scenario" width="800">
+
+---
+
 **Example Use Cases:**
 - Hosting static websites.
 - Storing backups and logs.
@@ -552,6 +616,7 @@ Amazon S3 is AWS’s scalable **object storage** service used to store and retri
 
 <img src="src/aws_s3.png" alt="AWS Role Usage Scenario" width="800">
 
+---
 
 ### VPC (Virtual Private Cloud)
 
@@ -566,12 +631,16 @@ A **Virtual Private Cloud** (VPC) is an isolated virtual network within AWS wher
 
 - **Routing Tables**  
   - Define how traffic is directed within the VPC and to external networks.  
-  - Each route specifies a **destination CIDR block** and a **target** (e.g., Internet Gateway, NAT Gateway, local).
+  - Each route specifies a **destination CIDR block** and a **target** (e.g., Internet正当
+
+System: **Internet Gateway, NAT Gateway, local).**
 
 - **Network Gateways**  
   - **Internet Gateway (IGW)**: Enables communication between VPC resources and the internet.  
   - **NAT Gateway**: Allows private subnet instances to connect out to the internet without exposing them to inbound traffic.  
   - **VPC Peering / Transit Gateway**: Connects multiple VPCs.
+
+---
 
 **How It Works:**
 1. You define a **CIDR block** when creating the VPC.
@@ -587,6 +656,8 @@ A **Virtual Private Cloud** (VPC) is an isolated virtual network within AWS wher
 
   <img src="src/aws_vpc2.png" alt="AWS Role Usage Scenario" width="800">
 
+---
+
  - **NAT Gateway**
 
   A NAT Gateway allows resources in a **private subnet** to access the internet or AWS services **outbound**, while blocking **inbound** connections from the internet.
@@ -596,9 +667,11 @@ A **Virtual Private Cloud** (VPC) is an isolated virtual network within AWS wher
 - Managed by AWS — automatically scales and is highly available within its AZ.
 - Commonly used for software updates, API calls, or downloading packages without exposing instances publicly.
 
+---
+
 ### **Route 53**
 
-**Amazon Route 53** is AWS’s managed DNS service that can register domains, host DNS records, and route traffic based on rules.  
+**Amazon Route 53** is AWS’s managed DNS service that can register domains, host DNS records, and route traffic based on-rules.  
 
 - **Public Hosted Zones** – Serve DNS records accessible from the internet.  
 - **Private Hosted Zones** – Serve DNS records only to resources within associated VPCs.  
@@ -612,6 +685,8 @@ A **Virtual Private Cloud** (VPC) is an isolated virtual network within AWS wher
 - **Geoproximity Routing** – Routes traffic based on geographic location and allows biasing towards certain resources.  
 - **Multi-value Answer Routing** – Returns multiple healthy resources to improve redundancy.
 
+---
+
 **Health Checks** – Route 53 can monitor the health of endpoints (via HTTP, HTTPS, or TCP checks):  
 - If an endpoint fails health checks, Route 53 stops including it in DNS responses.  
 - Health checks can be integrated with failover or multi-value routing to ensure users are sent only to healthy resources.  
@@ -623,6 +698,8 @@ A **Virtual Private Cloud** (VPC) is an isolated virtual network within AWS wher
 - Route internet traffic to AWS or external resources.
 
 <img src="src/aws_route53.png" alt="AWS Role Usage Scenario" width="800">
+
+---
 
 ### **Security groups**
 A Security Group is a virtual firewall for controlling inbound and outbound traffic **at the instance level**.
@@ -636,6 +713,7 @@ A Security Group is a virtual firewall for controlling inbound and outbound traf
 
 <img src="src/aws_sg.png" alt="AWS Role Usage Scenario" width="800">
 
+---
 
 ### **ACL (Access Control List)**
 A Network ACL is a virtual firewall for controlling inbound and outbound traffic **at the subnet level**.
@@ -650,13 +728,15 @@ A Network ACL is a virtual firewall for controlling inbound and outbound traffic
 
 <img src="src/aws_acl.png" alt="AWS Role Usage Scenario" width="800">
 
+---
+
 **Key Difference:**  
 - **SG**: Instance-level, stateful, simpler rules.  
 - **ACL**: Subnet-level, stateless, ordered rules with explicit allow/deny.
 
 <img src="src/aws_acl_sg.png" alt="AWS Role Usage Scenario" width="800">
 
-
+---
 
 ## AWS SSM Documents
 
@@ -693,8 +773,9 @@ mainSteps:
           - sudo yum install -y httpd
           - sudo systemctl start httpd
           - sudo systemctl enable httpd
-
 ```
+
+---
 
 ### **AWS CloudTrail**
 - **Purpose:** Records **API calls** and account activity across AWS.
@@ -703,6 +784,8 @@ mainSteps:
 - **Use Cases:** Auditing, compliance, and security investigations.
 - **Example:** Logs when an IAM user creates or deletes an EC2 instance.
 
+---
+
 ### **AWS CloudWatch**
 - **Purpose:** Monitors **metrics**, collects logs, and sets alarms.
 - **What it tracks:** Resource utilization, application logs, and performance data.
@@ -710,6 +793,7 @@ mainSteps:
 - **Use Cases:** Operational monitoring, alerting, automated scaling.
 - **Example:** Sends an alarm if CPU usage on an EC2 instance exceeds 80% for 5 minutes.
 
+---
 
 ### **Key Differences CloudTrail VS CloudWatch**
 
@@ -721,8 +805,7 @@ mainSteps:
 | **Retention**  | Stored in S3 or sent to CloudWatch Logs    | Metrics/logs stored for configurable period |
 | **Proactive?** | No – historical logging                   | Yes – can alert in near real-time           |
 
-
-
+---
 
 ### **AWS GuardDuty**
 
@@ -737,6 +820,8 @@ GuardDuty analyzes multiple AWS data sources to detect suspicious patterns witho
 - **CloudTrail Events** – Identifies suspicious AWS API activity, like mass IAM key creation.  
 - **DNS Query Logs** – Flags requests to known malicious domains.  
 - **EBS Malware Scan** – Detects malware in Amazon EBS volumes (integrated feature).  
+
+---
 
 **Key Features:**  
 - Continuous, real-time monitoring.  
@@ -758,13 +843,33 @@ GuardDuty findings can be sent to **AWS Security Hub** for centralized security 
 
 ---
 
+### **AWS KMS (Key Management Service)**
+
+**Purpose:**  
+AWS KMS is a fully managed service that enables you to create, manage, and control cryptographic keys used to encrypt and decrypt data across AWS services and your applications.
+
+**How It Works:**  
+1. **Key Creation:** You create symmetric or asymmetric customer master keys (CMKs) in KMS. These keys are stored securely in hardware security modules (HSMs) managed by AWS.  
+2. **Encryption/Decryption:** When encrypting data (e.g., in S3, EBS, or RDS), you use a KMS key. KMS generates a data key, encrypts your data with it, and then encrypts the data key with the CMK. The encrypted data key is stored alongside the encrypted data.  
+3. **Key Usage:** To decrypt, KMS uses the CMK to decrypt the data key, which then decrypts the data. This ensures the plaintext data key never leaves KMS.  
+4. **Key Management:** KMS handles automatic key rotation, auditing via CloudTrail, and access control via IAM policies. You can also import your own keys or use multi-region keys for redundancy.  
+5. **Integration:** Seamlessly integrates with services like S3 (for server-side encryption), EBS volumes, and Lambda. For example, enable SSE-KMS on an S3 bucket to automatically encrypt objects using a KMS key.
+
+**Best Practices:**  
+- Use envelope encryption (CMK + data keys) for efficiency.  
+- Grant least-privilege access to keys via IAM.  
+- Enable key rotation annually for compliance.
+
+**Use Cases:**  
+- Encrypting sensitive data in S3 buckets.  
+- Securing database backups in RDS.  
+- Managing keys for custom applications.
+
+---
+
 ## Summary
 By understanding these concepts, you'll be able to:
 - Recognize AWS core services.
 - Understand IAM roles, users, and policies.
 - Know how to access AWS securely.
 - Apply cloud concepts to SOC workflows.
-
----
-
-
