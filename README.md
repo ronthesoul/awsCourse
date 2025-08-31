@@ -631,7 +631,7 @@ A **Virtual Private Cloud** (VPC) is an isolated virtual network within AWS wher
 
 - **Routing Tables**  
   - Define how traffic is directed within the VPC and to external networks.  
-  - Each route specifies a **destination CIDR block** and a **target** (e.g., Internet正当
+  - Each route specifies a **destination CIDR block** and a **target** (e.g., Internet)
 
 System: **Internet Gateway, NAT Gateway, local).**
 
